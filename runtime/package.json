@@ -1,0 +1,9 @@
+{
+  "name": "babel-plugin-firetruss-runtime",
+  "version": "1.0.0",
+  "description": "The runtime code referenced by the plugin",
+  "main": "index.js",
+  "repository": "git@github.com:pkaminski/babel-plugin-firetruss.git",
+  "author": "Piotr Kaminski <piotr@ideanest.com>",
+  "license": "MIT"
+}
