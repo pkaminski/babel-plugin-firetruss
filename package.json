@@ -1,0 +1,12 @@
+{
+  "name": "firetruss-plugins",
+  "version": "1.0.0",
+  "description": "Plugins and related runtime for Firetruss",
+  "repository": "git@github.com:pkaminski/firetruss-plugins.git",
+  "author": "Piotr Kaminski <piotr@ideanest.com>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^7.9.0"
+  }
+}

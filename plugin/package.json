@@ -1,9 +1,0 @@
-{
-  "name": "babel-plugin-firetruss",
-  "version": "1.0.0",
-  "description": "Extra Babel transforms to make Firetruss client code more reliable",
-  "main": "index.js",
-  "repository": "git@github.com:pkaminski/babel-plugin-firetruss.git",
-  "author": "Piotr Kaminski <piotr@ideanest.com>",
-  "license": "MIT"
-}

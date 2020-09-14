@@ -1,30 +1,22 @@
-/* eslint-env node */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
-module.exports = function ({ types: t }) {
+module.exports = function({types}) {
+  const t = types;
   let programPath;
-  let vueImported = false;
-  let makeRefImported = false;
+  let runtimeImported = false;
 
-  function importVueOnce(t) {
-    if (vueImported) return;
-    programPath.unshiftContainer(
-      'body',
-      t.importDeclaration([t.importDefaultSpecifier(t.identifier('Vue'))], t.stringLiteral('vue'))
-    );
-    vueImported = true;
-  }
-
-  function importMakeRefOnce(t) {
-    if (makeRefImported) return;
+  function importRuntimeOnce() {
+    if (runtimeImported) return;
     programPath.unshiftContainer(
       'body',
       t.importDeclaration(
-        [t.importSpecifier(t.identifier('_makeRef'), t.identifier('makeRef'))],
-        t.stringLiteral('babel-plugin-firetruss-runtime')
+        [
+          t.importSpecifier(t.identifier('_makeRef'), t.identifier('makeRef')),
+          t.importSpecifier(t.identifier('_set'), t.identifier('set')),
+          t.importSpecifier(t.identifier('_del'), t.identifier('del')),
+        ],
+        t.stringLiteral('firetruss-plugin-runtime')
       )
     );
-    makeRefImported = true;
+    runtimeImported = true;
   }
 
   return {
@@ -38,10 +30,10 @@ module.exports = function ({ types: t }) {
         const arg = path.node.argument;
         if (path.node.operator === 'delete' && t.isMemberExpression(arg)) {
           path.replaceWith(t.callExpression(
-            t.memberExpression(t.identifier('Vue'), t.identifier('delete')),
+            t.identifier('_del'),
             [arg.object, arg.computed ? arg.property : t.stringLiteral(arg.proprety.name)]
           ));
-          importVueOnce(t);
+          importRuntimeOnce();
         }
       },
 
@@ -51,14 +43,14 @@ module.exports = function ({ types: t }) {
           const rootIdentifier = getRootIdentifier(t, left);
           if (rootIdentifier !== 'window' && rootIdentifier !== 'exports') {
             path.replaceWith(t.callExpression(
-              t.memberExpression(t.identifier('Vue'), t.identifier('set')),
+              t.identifier('_set'),
               [
                 left.object,
                 left.computed ? left.property : t.stringLiteral(left.property.name),
                 path.node.right
               ]
             ));
-            importVueOnce(t);
+            importRuntimeOnce();
           }
         }
       },
@@ -81,7 +73,7 @@ module.exports = function ({ types: t }) {
             args.unshift(t.stringLiteral(methodName));
             args.unshift(node);
             path.replaceWith(t.callExpression(t.identifier('_makeRef'), args));
-            importMakeRefOnce(t);
+            importRuntimeOnce(t);
           }
         }
       }

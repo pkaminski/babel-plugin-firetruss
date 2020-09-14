@@ -1,1 +1,1 @@
-# babel-plugin-firetruss
+# firetruss-plugins

@@ -1,0 +1,15 @@
+{
+  "name": "snowpack-plugin-firetruss",
+  "version": "1.0.0",
+  "description": "Convenience Snowpack transforms for Firetruss",
+  "main": "index.js",
+  "repository": "git@github.com:pkaminski/firetruss-plugins.git",
+  "author": "Piotr Kaminski <piotr@ideanest.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "snowpack": "^2.11.1"
+  },
+  "dependencies": {
+    "recast": "^0.20.3"
+  }
+}
