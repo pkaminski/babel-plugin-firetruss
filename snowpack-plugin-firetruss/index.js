@@ -6,6 +6,7 @@ const printOptions = {tabWidth: 2, lineTerminator: '\n', wrapColumn: Infinity, q
 
 module.exports = function() {
   return {
+    knownEntrypoints: ['firetruss-plugin-runtime'],
     transform: async ({id, fileExt, contents}) => {
       if (fileExt !== '.js') return;
 
