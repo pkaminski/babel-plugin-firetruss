@@ -1,8 +1,36 @@
 const basename = require('path').basename;
 const recast = require('recast');
+const acorn = require('acorn').Parser.extend(require('acorn-stage3'));
 const b = recast.types.builders;
 const n = recast.types.namedTypes;
 const printOptions = {tabWidth: 2, lineTerminator: '\n', wrapColumn: Infinity, quote: 'single'};
+
+const acornParser = {
+  parse(source) {
+    const comments = [];
+    const tokens = [];
+    const ast = acorn.parse(source, {
+      allowHashBang: true,
+      allowImportExportEverywhere: true,
+      allowReturnOutsideFunction: true,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      locations: true,
+      onComment: comments,
+      onToken: tokens,
+    });
+
+    if (!ast.comments) {
+      ast.comments = comments;
+    }
+
+    if (!ast.tokens) {
+      ast.tokens = tokens;
+    }
+
+    return ast;
+  }
+};
 
 module.exports = function() {
   return {
@@ -93,7 +121,7 @@ module.exports = function() {
         }
       };
 
-      const ast = recast.parse(contents, {sourceFileName: id});
+      const ast = recast.parse(contents, {sourceFileName: id, parser: acornParser});
       recast.types.visit(ast, visitors);
       const result = recast.print(ast, printOptions, {sourceMapName: basename(id) + '.map'});
       return {
