@@ -124,10 +124,7 @@ module.exports = function() {
       const ast = recast.parse(contents, {sourceFileName: id, parser: acornParser});
       recast.types.visit(ast, visitors);
       const result = recast.print(ast, printOptions, {sourceMapName: basename(id) + '.map'});
-      return {
-        result: result.code,
-        map: result.map
-      };
+      return {contents: result.code, map: result.map};
     },
   };
 };
